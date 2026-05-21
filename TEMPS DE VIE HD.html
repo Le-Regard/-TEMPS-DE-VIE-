@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEMPS DE VIE — Le Regard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;overflow:hidden;}
+#tdv-conteneur{display:inline-block;border-radius:16px;padding:28px 22px 26px;background:linear-gradient(180deg,#0e0e1c 0%,#080810 50%,#0a0a14 100%);box-shadow:0 0 80px rgba(180,120,0,0.15),0 30px 80px rgba(0,0,0,0.98),inset 0 1px 0 rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.12);position:relative;overflow:hidden;}
+#tdv-conteneur::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:100;}
+.tdv-corner{position:absolute;width:16px;height:16px;opacity:0.3;}
+.tdv-corner.tl{top:10px;left:10px;border-top:1px solid #ffd700;border-left:1px solid #ffd700;}
+.tdv-corner.tr{top:10px;right:10px;border-top:1px solid #ffd700;border-right:1px solid #ffd700;}
+.tdv-corner.bl{bottom:10px;left:10px;border-bottom:1px solid #ffd700;border-left:1px solid #ffd700;}
+.tdv-corner.br{bottom:10px;right:10px;border-bottom:1px solid #ffd700;border-right:1px solid #ffd700;}
+#tdv-titre-wrap{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:20px;}
+#tdv-titre{font-family:'Cinzel',serif;font-size:28px;font-weight:900;letter-spacing:6px;white-space:nowrap;background:linear-gradient(180deg,#fffbe0 0%,#ffd700 15%,#ffb800 30%,#ffe44d 45%,#ffd700 55%,#cc8800 70%,#ffcc00 85%,#fff8b0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 12px rgba(255,180,0,0.8)) drop-shadow(0 2px 4px rgba(0,0,0,0.9));}
+.tdv-line{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.3),rgba(255,215,0,0.6),rgba(255,215,0,0.3),transparent);margin-bottom:20px;}
+#tdv-grille{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-end;gap:6px;padding-bottom:4px;}
+.tdv-unite{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
+.tdv-label{font-family:'Cinzel',serif;font-size:7.5px;color:rgba(255,180,0,0.5);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;}
+.tdv-flip{width:52px;height:66px;position:relative;border-radius:8px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.06),0 0 0 1px rgba(255,215,0,0.08);background:#111118;flex-shrink:0;}
+.tdv-ht{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,#1e1e2e,#16161f);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;border-radius:8px 8px 0 0;border-bottom:1px solid rgba(0,0,0,0.8);}
+.tdv-hb{position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(180deg,#0e0e16,#141420);display:flex;align-items:flex-start;justify-content:center;overflow:hidden;border-radius:0 0 8px 8px;}
+.tdv-ht span,.tdv-hb span{font-family:'Roboto Mono',monospace;font-weight:700;font-size:34px;color:#fff;line-height:1;display:block;text-shadow:0 0 20px rgba(255,200,100,0.6),0 2px 4px rgba(0,0,0,0.8);}
+.tdv-ht span{transform:translateY(50%);}
+.tdv-hb span{transform:translateY(-50%);}
+.tdv-fc{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,#1e1e2e,#16161f);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;border-radius:8px 8px 0 0;transform-origin:bottom center;transform-style:preserve-3d;z-index:5;}
+.tdv-fc span{font-family:'Roboto Mono',monospace;font-weight:700;font-size:34px;color:#fff;line-height:1;transform:translateY(50%);text-shadow:0 0 20px rgba(255,200,100,0.6),0 2px 4px rgba(0,0,0,0.8);}
+.tdv-fc.tdv-anim{animation:tdvFlipHD 0.45s cubic-bezier(0.4,0,0.2,1) forwards;}
+@keyframes tdvFlipHD{0%{transform:rotateX(0deg);}50%{transform:rotateX(-90deg);}100%{transform:rotateX(-180deg);}}
+.tdv-flip::after{content:'';position:absolute;top:50%;left:0;right:0;height:1.5px;background:rgba(0,0,0,0.95);transform:translateY(-50%);z-index:10;}
+.tdv-sep{font-family:'Roboto Mono',monospace;font-size:22px;font-weight:700;color:rgba(255,215,0,0.3);margin-bottom:14px;flex-shrink:0;}
+#tdv-signature{text-align:center;margin-top:22px;font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:5px;background:linear-gradient(180deg,#ffd0a0 0%,#cd7f32 18%,#e8a060 36%,#ff9900 50%,#b8620a 66%,#e8902a 82%,#ffc080 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(180,90,0,0.6));}
+</style>
+</head>
+<body>
+<div id="tdv-conteneur">
+  <div class="tdv-corner tl"></div><div class="tdv-corner tr"></div>
+  <div class="tdv-corner bl"></div><div class="tdv-corner br"></div>
+  <div id="tdv-titre-wrap">
+    <canvas id="tdv-sabG" width="52" height="72" style="flex-shrink:0;"></canvas>
+    <div id="tdv-titre">TEMPS DE VIE</div>
+    <canvas id="tdv-sabD" width="52" height="72" style="flex-shrink:0;"></canvas>
+  </div>
+  <div class="tdv-line"></div>
+  <div id="tdv-grille">
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-ans">46</span></div><div class="tdv-hb"><span id="tdv-hb-ans">46</span></div><div class="tdv-fc" id="tdv-fc-ans"><span id="tdv-fc-ans-txt">46</span></div></div>
+      <div class="tdv-label">Années</div>
+    </div>
+    <div class="tdv-sep">·</div>
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-mois">02</span></div><div class="tdv-hb"><span id="tdv-hb-mois">02</span></div><div class="tdv-fc" id="tdv-fc-mois"><span id="tdv-fc-mois-txt">02</span></div></div>
+      <div class="tdv-label">Mois</div>
+    </div>
+    <div class="tdv-sep">·</div>
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-jour">00</span></div><div class="tdv-hb"><span id="tdv-hb-jour">00</span></div><div class="tdv-fc" id="tdv-fc-jour"><span id="tdv-fc-jour-txt">00</span></div></div>
+      <div class="tdv-label">Jours</div>
+    </div>
+    <div class="tdv-sep">·</div>
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-heure">00</span></div><div class="tdv-hb"><span id="tdv-hb-heure">00</span></div><div class="tdv-fc" id="tdv-fc-heure"><span id="tdv-fc-heure-txt">00</span></div></div>
+      <div class="tdv-label">Heures</div>
+    </div>
+    <div class="tdv-sep">:</div>
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-min">00</span></div><div class="tdv-hb"><span id="tdv-hb-min">00</span></div><div class="tdv-fc" id="tdv-fc-min"><span id="tdv-fc-min-txt">00</span></div></div>
+      <div class="tdv-label">Min.</div>
+    </div>
+    <div class="tdv-sep">:</div>
+    <div class="tdv-unite">
+      <div class="tdv-flip"><div class="tdv-ht"><span id="tdv-ht-sec">00</span></div><div class="tdv-hb"><span id="tdv-hb-sec">00</span></div><div class="tdv-fc" id="tdv-fc-sec"><span id="tdv-fc-sec-txt">00</span></div></div>
+      <div class="tdv-label">Sec.</div>
+    </div>
+  </div>
+  <div id="tdv-signature">— Le Regard —</div>
+</div>
+
+<script>
+(function(){
+var W=52,H=72,CX=26,TOP=7,BOT=65,MID=36;
+
+function makeGold(ctx){
+  var g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#fffbe0');g.addColorStop(0.25,'#ffd700');
+  g.addColorStop(0.5,'#b8860b');g.addColorStop(0.75,'#ffd700');
+  g.addColorStop(1,'#fff8b0');return g;
+}
+function makeSand(ctx,y1,y2){
+  var g=ctx.createLinearGradient(0,y1,0,y2);
+  g.addColorStop(0,'#ffe566');g.addColorStop(0.4,'#ffb800');
+  g.addColorStop(0.75,'#cc8800');g.addColorStop(1,'#8a5a00');return g;
+}
+
+// pct = 0 => sablier plein en haut, vide en bas (début de minute)
+// pct = 1 => sablier vide en haut, plein en bas (fin de minute)
+function drawSablier(id, pct, flipPct){
+  var canvas=document.getElementById(id);if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+
+  // Animation de retournement
+  if(flipPct>0){
+    var sy=Math.cos(flipPct*Math.PI);
+    ctx.translate(CX,H/2);ctx.scale(1,sy);ctx.translate(-CX,-H/2);
+    pct=flipPct<0.5?1:0;
+  }
+
+  var gold=makeGold(ctx);
+
+  // Plaques haut et bas
+  ctx.save();
+  ctx.shadowColor='rgba(255,180,0,0.3)';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.roundRect(2,0,W-4,8,3);ctx.fillStyle=gold;ctx.fill();
+  ctx.beginPath();ctx.roundRect(2,H-8,W-4,8,3);ctx.fillStyle=gold;ctx.fill();
+  ctx.restore();
+
+  // Contours du sablier
+  ctx.lineWidth=2;ctx.strokeStyle=gold;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(4,TOP);ctx.lineTo(CX,MID);ctx.lineTo(4,BOT);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W-4,TOP);ctx.lineTo(CX,MID);ctx.lineTo(W-4,BOT);ctx.stroke();
+
+  // === RESERVOIR HAUT — se vide de haut en bas ===
+  // pct=0 : plein (sable de TOP à MID)
+  // pct=1 : vide
+  // Le niveau du sable dans le haut descend : baseY_top va de TOP (plein) à MID (vide)
+  var baseY_top = TOP + (MID - TOP) * pct;
+
+  if(baseY_top < MID){
+    ctx.save();
+    // Clip = triangle haut exact
+    ctx.beginPath();
+    ctx.moveTo(4,TOP);ctx.lineTo(W-4,TOP);ctx.lineTo(CX,MID);ctx.closePath();
+    ctx.clip();
+
+    // Remplir le sable en bas du triangle haut (de baseY_top à MID)
+    // À la hauteur y dans [TOP,MID], la demi-largeur est : (CX-4)*(MID-y)/(MID-TOP)
+    ctx.beginPath();
+    // Point gauche en bas
+    var hw_base = (CX-4)*(MID-baseY_top)/(MID-TOP);
+    ctx.moveTo(CX-hw_base, baseY_top);
+    ctx.lineTo(CX+hw_base, baseY_top);
+    ctx.lineTo(CX, MID);
+    ctx.closePath();
+    ctx.fillStyle=makeSand(ctx,baseY_top,MID);
+    ctx.fill();
+
+    // Surface brillante
+    ctx.beginPath();
+    ctx.ellipse(CX,baseY_top,hw_base,1.5,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,235,120,0.5)';ctx.fill();
+    ctx.restore();
+  }
+
+  // === FILET DE SABLE au centre ===
+  if(pct>0.02 && pct<0.98){
+    ctx.save();
+    ctx.globalAlpha=0.85;
+    var sg=ctx.createLinearGradient(CX,MID,CX,MID+6);
+    sg.addColorStop(0,'rgba(255,220,80,0.95)');
+    sg.addColorStop(1,'rgba(180,120,0,0.1)');
+    ctx.fillStyle=sg;
+    ctx.beginPath();ctx.ellipse(CX,MID+3,1.1,4,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+
+  // === RESERVOIR BAS — se remplit de bas en haut ===
+  // pct=0 : vide
+  // pct=1 : plein (sable de MID à BOT)
+  // Le niveau du sable monte : surfY va de BOT (vide, niveau=bas) à MID (plein)
+  // En fait surfY = BOT - (BOT-MID)*pct => quand pct=0, surfY=BOT (vide), quand pct=1, surfY=MID (plein)
+  var surfY = BOT - (BOT-MID)*pct;
+
+  if(surfY < BOT){
+    ctx.save();
+    // Clip = triangle bas exact
+    ctx.beginPath();
+    ctx.moveTo(CX,MID);ctx.lineTo(W-4,BOT);ctx.lineTo(4,BOT);ctx.closePath();
+    ctx.clip();
+
+    // Remplir le sable en haut du triangle bas (de surfY à BOT)
+    // À la hauteur y dans [MID,BOT], la demi-largeur est : (CX-4)*(y-MID)/(BOT-MID)
+    var hw_surf = (CX-4)*(surfY-MID)/(BOT-MID);
+    ctx.beginPath();
+    ctx.moveTo(CX-hw_surf, surfY);
+    ctx.lineTo(CX+hw_surf, surfY);
+    ctx.lineTo(W-4, BOT);
+    ctx.lineTo(4, BOT);
+    ctx.closePath();
+    ctx.fillStyle=makeSand(ctx,surfY,BOT);
+    ctx.fill();
+
+    // Surface brillante
+    ctx.beginPath();
+    ctx.ellipse(CX,surfY,hw_surf,1.8,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,235,120,0.4)';ctx.fill();
+    ctx.restore();
+  }
+
+  // Point central doré
+  ctx.save();
+  ctx.shadowColor='rgba(255,200,0,0.9)';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.arc(CX,MID,2.5,0,Math.PI*2);
+  ctx.fillStyle=gold;ctx.fill();
+  ctx.restore();
+
+  // Reflet verre
+  ctx.save();ctx.globalAlpha=0.06;
+  ctx.strokeStyle='rgba(255,255,200,0.9)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(W-6,TOP);ctx.lineTo(CX+1,MID);ctx.lineTo(W-6,BOT);ctx.stroke();
+  ctx.restore();
+
+  ctx.restore();
+}
+
+// Compteur
+var birth=new Date(1979,1,11,18,20,0);
+var prev={};
+function pad(n){return String(Math.floor(Math.max(0,n))).padStart(2,'0');}
+function calcTemps(){
+  var now=new Date(),diff=now-birth;if(diff<0)diff=0;
+  var ans=now.getFullYear()-birth.getFullYear();
+  var mois=now.getMonth()-birth.getMonth();
+  if(mois<0){ans--;mois+=12;}
+  var bD=birth.getDate(),bH=birth.getHours(),bMin=birth.getMinutes();
+  var nD=now.getDate(),nH=now.getHours(),nMin=now.getMinutes();
+  if(nD<bD||(nD===bD&&(nH<bH||(nH===bH&&nMin<bMin)))){mois--;if(mois<0){ans--;mois+=11;}}
+  var lastAnniv=new Date(now.getFullYear(),now.getMonth(),bD,bH,bMin,0);
+  if(lastAnniv>now)lastAnniv=new Date(now.getFullYear(),now.getMonth()-1,bD,bH,bMin,0);
+  var joursDepuis=Math.floor((now-lastAnniv)/86400000);
+  var jour=joursDepuis%30;
+  var totalSec=Math.floor(diff/1000);
+  var sec=totalSec%60,min=Math.floor(totalSec/60)%60,h=Math.floor(totalSec/3600)%24;
+  return{ans:pad(ans),mois:pad(mois),jour:pad(jour),h:pad(h),min:pad(min),sec:pad(sec)};
+}
+function doFlip(key,newVal){
+  var ht=document.getElementById('tdv-ht-'+key),hb=document.getElementById('tdv-hb-'+key);
+  var fc=document.getElementById('tdv-fc-'+key),fct=document.getElementById('tdv-fc-'+key+'-txt');
+  if(!ht||!hb||!fc||!fct)return;
+  fct.textContent=prev[key]||newVal;
+  fc.classList.remove('tdv-anim');void fc.offsetWidth;
+  hb.textContent=newVal;fc.classList.add('tdv-anim');
+  setTimeout(function(){ht.textContent=newVal;fc.classList.remove('tdv-anim');fct.textContent=newVal;},480);
+}
+function update(){
+  var t=calcTemps();
+  var map={ans:'ans',mois:'mois',jour:'jour',h:'heure',min:'min',sec:'sec'};
+  Object.keys(map).forEach(function(k){var id=map[k];if(t[k]!==prev[k]){doFlip(id,t[k]);prev[k]=t[k];}});
+}
+var t0=calcTemps();
+['ans','mois','jour','h','min','sec'].forEach(function(k){
+  var id={ans:'ans',mois:'mois',jour:'jour',h:'heure',min:'min',sec:'sec'}[k];
+  var ht=document.getElementById('tdv-ht-'+id),hb=document.getElementById('tdv-hb-'+id),fct=document.getElementById('tdv-fc-'+id+'-txt');
+  if(ht)ht.textContent=t0[k];if(hb)hb.textContent=t0[k];if(fct)fct.textContent=t0[k];
+  prev[k]=t0[k];
+});
+setInterval(update,1000);
+
+var flipInProgress=false,flipStartTime=0,FLIP_DUR=800,lastMinAnim=-1;
+function animLoop(){
+  var now=Date.now();
+  var totalSec=Math.floor((now-birth)/1000);
+  var sec=totalSec%60,min=Math.floor(totalSec/60)%60,ms=now%1000;
+  // pct = progression dans la minute (0=début, 1=fin)
+  var pct=(sec*1000+ms)/60000;
+  if(min!==lastMinAnim&&sec===0&&!flipInProgress){lastMinAnim=min;flipInProgress=true;flipStartTime=now;}
+  var flipPct=0;
+  if(flipInProgress){flipPct=Math.min((now-flipStartTime)/FLIP_DUR,1);if(flipPct>=1){flipInProgress=false;flipPct=0;}}
+  drawSablier('tdv-sabG',pct,flipPct);
+  drawSablier('tdv-sabD',pct,flipPct);
+  requestAnimationFrame(animLoop);
+}
+animLoop();
+})();
+</script>
+</body>
+</html>
